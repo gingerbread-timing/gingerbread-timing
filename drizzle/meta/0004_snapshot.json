@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "d04b90d3-959e-40f7-9ff4-ab9656bd5dc5",
-  "prevId": "7f99fb85-294c-4dfb-8c93-a009012a3b0e",
+  "id": "de41b5ef-c00f-4206-886c-b2b9d33c4034",
+  "prevId": "c5d9551d-a349-4dd5-a522-f4fe85e1e2a5",
   "tables": {
     "races": {
       "name": "races",
@@ -110,8 +110,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {}
     },
-    "user_races": {
-      "name": "user_races",
+    "signups": {
+      "name": "signups",
       "columns": {
         "id": {
           "name": "id",
@@ -169,6 +169,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "checkedin": {
+          "name": "checkedin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "signupdate": {
           "name": "signupdate",
           "type": "timestamp",
@@ -178,34 +185,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "user_races_userid_users_id_fk": {
-          "name": "user_races_userid_users_id_fk",
-          "tableFrom": "user_races",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userid"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "user_races_raceid_races_id_fk": {
-          "name": "user_races_raceid_races_id_fk",
-          "tableFrom": "user_races",
-          "tableTo": "races",
-          "columnsFrom": [
-            "raceid"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {}
     },
     "users": {
@@ -217,13 +197,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": true
-        },
-        "username": {
-          "name": "username",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         },
         "firstname": {
           "name": "firstname",
@@ -246,8 +219,57 @@
           "notNull": false,
           "autoincrement": false
         },
+        "birthday": {
+          "name": "birthday",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "phone": {
           "name": "phone",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "zip": {
+          "name": "zip",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false,
