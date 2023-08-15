@@ -2,11 +2,11 @@ import { serial, text, timestamp, mysqlTable, datetime, varchar, int, float, boo
  
 export const users = mysqlTable("users", {
   id: serial("id"),
-  firstname: varchar("firstname", {length: 255}),
-  lastname: varchar("lastname", {length: 255}),
-  email: varchar("email", {length: 255}),
-  birthday: varchar("birthday", {length: 255}),
-  gender: varchar("gender", {length: 255}),
+  firstname: varchar("firstname", {length: 255}).notNull(),
+  lastname: varchar("lastname", {length: 255}).notNull(),
+  email: varchar("email", {length: 255}).notNull(),
+  birthday: datetime("birthday").notNull(),
+  gender: varchar("gender", {length: 255}).notNull(),
   phone: varchar("phone", {length: 255}),
   address: varchar("address", {length: 255}),
   country: varchar("country", {length: 255}),
@@ -22,13 +22,13 @@ export const users = mysqlTable("users", {
 
 export const races = mysqlTable("races", {
   id: serial("id"),
-  name: varchar("name", {length: 255}),
+  name: varchar("name", {length: 255}).notNull(),
   routeURL: varchar("routeurl", {length: 2048}),
   heroURL: varchar("herourl", {length: 2048}),
   location: varchar("location", {length: 2048}),
-  starttime: datetime("starttime"),
-  endtime: datetime("endtime"),
-  description: text("description"),
+  starttime: datetime("starttime").notNull(),
+  endtime: datetime("endtime").notNull(),
+  description: text("description").notNull(),
   contactemail: varchar("contactemail", {length: 255}),
   instagram: varchar("instagram", {length: 255}),
   facebook: varchar("facebook", {length: 255}),
@@ -39,8 +39,8 @@ export const races = mysqlTable("races", {
 
 export const signups = mysqlTable("signups", {
   id: serial("id"),
-  userid: int('userid'), //.references(() => users.id), planetscale doesnt do foreign keys
-  raceid: int('raceid'), //.references(() => races.id),
+  userid: int('userid').notNull(),
+  raceid: int('raceid').notNull(),
   bibnumber: int('bibnumber'),
   sensorid: int('sensorid'),
   totaltime: float('totaltime'),

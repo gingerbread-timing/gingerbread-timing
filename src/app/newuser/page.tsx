@@ -31,7 +31,7 @@ export default function Home() {
                     <div style={{display: 'flex'}}>
                         <div className="vertical" style={{width: '300px'}}>
                             <label htmlFor="birthday">Date of Birth:</label>
-                            <input className="textField" type="date" id="birthday" name="birthday" required minLength={1}/>
+                            <input className="textField" type="date" id="birthday" name="birthday"/>
                         </div>
                         <div className="vertical" style={{width: '250px', margin: '0px 50px'}}>
                             <label htmlFor="gender">Gender:</label>

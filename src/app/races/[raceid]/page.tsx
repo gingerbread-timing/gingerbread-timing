@@ -4,6 +4,7 @@ import { races, users, signups } from '@/db/schema';
 import { getInternalUser } from '@/utils';
 import { getSession } from '@auth0/nextjs-auth0';
 import { eq } from "drizzle-orm";
+import Link from 'next/link';
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
@@ -12,11 +13,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
 
   //if we didn't find anything, return an error message
   if(result.length === 0)
-  {
-    return(
-      <div>RACE ID NOT FOUND</div>
-    )
-  }
+  { return(<div>RACE ID NOT FOUND</div>) }
 
   //otherwise, grab the result and return a page populated with that row of races
   const thisrace: Race = result[0];
@@ -28,22 +25,10 @@ export default async function Page({ params }: { params: { raceid: number } }) {
         <h1>{thisrace.name}</h1>
         <div>Description: {thisrace.description}</div>
         <div>other stuff about the race here</div>
-        <h1>Assigned Users:</h1>
-        <AssignedUsers  data={signedup} thisrace={thisrace}/>
         <SignMeUp data={signedup} thisrace={thisrace}/>
+        <div><Link href={`checkin/${params.raceid}`}>check-in this race</Link></div>
       </div>
     )
-  }
-
-  function AssignedUsers(params: any)
-  {
-    const userlist = params.data.map((user: any) => <div>Id:{user.users.id} First:{user.users.firstname} Last:{user.users.lastname}</div>);
-    
-    return(
-      <div>
-          {userlist}
-      </div>
-    );
   }
 
   async function SignMeUp(params: any)
@@ -55,9 +40,9 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     //if the logged in user is already signed up, let them know
     const userlist = params.data.map((user: any) => user.users.id);
     const internalUser = await getInternalUser();
-    for(var user in userlist)
+    for(var user of userlist)
     {
-      if(parseInt(user) == internalUser.id) return (<>looks like you're already signed up for this race!</>);
+      if(parseInt(user) === internalUser.id) return (<>looks like you're already signed up for this race!</>);
     }
    
     //otherwise allow a signup

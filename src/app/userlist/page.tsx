@@ -9,7 +9,6 @@ export default async function Home() {
       <div>
         <h1>Admin User List</h1>
         {userlist}
-        <div><Link href="/newuser">Add a User</Link></div>
       </div>
     )
   }

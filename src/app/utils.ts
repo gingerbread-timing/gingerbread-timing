@@ -17,3 +17,15 @@ export async function getInternalUser(){
     }
     return internalUser;
 }
+
+export function getUserAge(user: User)
+{
+  var today = new Date();
+    var birthDate = user.birthday;
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}

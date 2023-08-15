@@ -8,14 +8,14 @@ export default function Profile() {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
-  if(!user) return <Link href="/api/auth/login">Log In</Link>;
+  if(!user) return <a href="/api/auth/login">Log In</a>;
 
   return (
     user && (
       <div>
         <Link href="/userhub">{user.name}</Link>
         <div></div>
-        <Link href="/api/auth/logout">Log Out</Link>
+        <a href="/api/auth/logout">Log Out</a>
       </div>
     )
     
