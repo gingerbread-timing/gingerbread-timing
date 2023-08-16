@@ -319,11 +319,11 @@ export default function Home() {
                     </div>
 
                     <div style={{display: 'flex'}}>
-                        <div className="vertical" style={{width: '300px', marginRight: '50px'}}>
+                        <div className="vertical" style={{width: '300px'}}>
                             <label htmlFor="city">City:</label>
                             <input className="textField" type="text" id="city" name="city" required minLength={3}/>
                         </div>
-                        <div className="vertical" style={{width: '175px', marginRight: '425px'}}>
+                        <div className="vertical" style={{width: '175px', marginLeft: '50px', marginRight: '375px'}}>
                                 <label htmlFor="state">State:</label>
                                 <select className="dropDown" id="state" name="state">
                                 <option>select state</option>
