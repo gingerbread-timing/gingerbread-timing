@@ -1,8 +1,10 @@
-import { db, Race, User } from '@/db/dbstuff';
+import { db, Race, User, Signup } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
 import { getInternalUser, getUserAge } from '@/utils';
 import { getSession } from '@auth0/nextjs-auth0';
+import { revalidatePath } from 'next/cache';
 import { eq } from "drizzle-orm";
+import { redirect } from 'next/navigation';
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
@@ -19,18 +21,19 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     .innerJoin(signups, eq(users.id,signups.userid))
     .where(eq(signups.raceid,thisrace.id));
     const signedusers: User[] = signedup.map(instance => instance.users);
+    const signupinfo: Signup[] = signedup.map(instance => instance.signups);
     return (
       <div>
         <h1>{thisrace.name}</h1>
-        <h1>Check in users</h1>
-        <AssignedUsers  data={signedusers}/>
+        <h2>Check in users</h2>
+        <AssignedUsers  userinfo={signedusers} signupinfo={signupinfo}/>
       </div>
     )
   }
 
   function AssignedUsers(params: any)
   {
-    const userlist = params.data.map((user: User) => <SignedRunner runner={user}/>);
+    const userlist = params.userinfo.map((user: User, index: number) => <SignedRunner runner={user} signup={params.signupinfo[index]}/>);
     
     return(
       <div>
@@ -42,12 +45,36 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   function SignedRunner(params: any)
   {
     const runner: User = params.runner;
+    const signup: Signup = params.signup;
     const age = getUserAge(runner);
     return(
         <div>
-            <div>{runner.firstname}</div>
-            <div>{runner.lastname}</div>
-            <div>{age}</div>
+            First: {runner.firstname} |
+            Last: {runner.lastname} |
+            Age: {age}
+            <CheckInStatus signup={signup}/>
         </div>
     )
+  }
+
+  function CheckInStatus(params: {signup: Signup}){
+    async function checkIn() {
+        'use server'
+        const racesignups: Signup[] = await db.select().from(signups).where(eq(signups.id,params.signup.raceid));
+        let bibs = racesignups.map(x => x.bibnumber);
+        bibs.sort();
+        const newbib = (bibs[-1] ?? 0) + 1;
+        await db.update(signups)
+        .set({ checkedin: true, bibnumber: newbib })
+        .where(eq(signups.id, params.signup.id));
+        revalidatePath(`/races/checkin/${params.signup.raceid}`)
+      }
+    if(params.signup.checkedin){
+        return(<>| Bib#: {params.signup.bibnumber}</>)};
+
+    return(
+        <form action={checkIn}>
+            <button type="submit">Check In</button>
+        </form>
+    );
   }

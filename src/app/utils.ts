@@ -29,3 +29,13 @@ export function getUserAge(user: User)
     }
     return age;
 }
+
+export function getStringDate(date?: Date){
+  if(!date) {return 'INVALID DATE'}
+  return `${date?.getMonth()}/${date?.getDate()}/${date?.getFullYear()}`
+}
+
+export function getStringTime(date?: Date){
+  if(!date) {return 'INVALID DATE'}
+  return `${date?.getHours()}:${date?.getMinutes()}`;
+}
