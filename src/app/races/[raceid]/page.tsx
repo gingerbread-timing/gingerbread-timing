@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
         <div>Start Time: {getStringTime(thisrace.starttime)}</div>
         <div>End Time: {getStringTime(thisrace.endtime)}</div>
         <SignMeUp data={signedup} thisrace={thisrace}/>
+        <SignOthersUp data={signedup} thisrace={thisrace}/>
         <div><Link href={`checkin/${params.raceid}`}>check-in this race (admin)</Link></div>
       </div>
     )
@@ -56,6 +57,22 @@ export default async function Page({ params }: { params: { raceid: number } }) {
             </div>
               <input type="hidden" id="raceid" name="raceid" value={params.thisrace.id}/>
             <button type="submit">Sign me up for this race!</button>
+          </form>
+      </div>
+    );
+  }
+
+  function SignOthersUp(params: any)
+  {
+    //id signup for testing
+    return(
+      <div>
+          <form action="/api/newsignup" method="post">
+            <div>
+              <input type="text" id="userid" name="userid"/>
+            </div>
+              <input type="hidden" id="raceid" name="raceid" value={params.thisrace.id}/>
+            <button type="submit">TEST FEATURE: sign user up by ID</button>
           </form>
       </div>
     );

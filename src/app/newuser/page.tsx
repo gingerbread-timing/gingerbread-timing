@@ -383,16 +383,15 @@ export default function Home() {
                   </div>       
             <div>
                 <input type="hidden" value={user.email ?? ''} id="email" name="email" required/>
-                  </div>
-                    <div className="vertical">
-                        <label htmlFor="emergencyname">Emergency Contact Name:</label>
-                        <input className="textField" type="text" id="emergencyname" name="emergencyname" required minLength={5}/>
-                    </div>
-                    <div className="vertical">
-                        <label htmlFor="emergencyphone">Emergency Contact Phone Number:</label>
-                        <input className="textField" type="text" id="emergencyphone" name="emergencyphone" required minLength={5}/>
-                    </div>
-
+            </div>
+                <div className="vertical">
+                    <label htmlFor="emergencyname">Emergency Contact Name:</label>
+                    <input className="textField" type="text" id="emergencyname" name="emergencyname" required minLength={5}/>
+                </div>
+                <div className="vertical">
+                    <label htmlFor="emergencyphone">Emergency Contact Phone Number:</label>
+                    <input className="textField" type="text" id="emergencyphone" name="emergencyphone" required minLength={5}/>
+                </div>
                     <button className="submitButton" type="submit">Register</button>
                 </form>
             </div>

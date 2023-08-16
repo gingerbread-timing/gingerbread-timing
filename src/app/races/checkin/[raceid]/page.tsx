@@ -4,7 +4,6 @@ import { getInternalUser, getUserAge } from '@/utils';
 import { getSession } from '@auth0/nextjs-auth0';
 import { revalidatePath } from 'next/cache';
 import { eq } from "drizzle-orm";
-import { redirect } from 'next/navigation';
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
