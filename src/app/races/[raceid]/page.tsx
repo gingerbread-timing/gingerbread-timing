@@ -27,11 +27,28 @@ export default async function Page({ params }: { params: { raceid: number } }) {
         <div>Date: {getStringDate(thisrace.starttime)}</div>
         <div>Start Time: {getStringTime(thisrace.starttime)}</div>
         <div>End Time: {getStringTime(thisrace.endtime)}</div>
-        <SignMeUp data={signedup} thisrace={thisrace}/>
-        <SignOthersUp data={signedup} thisrace={thisrace}/>
-        <div><Link href={`checkin/${params.raceid}`}>check-in this race (admin)</Link></div>
+        <PreRace data={signedup} thisrace={thisrace}/>
+        <CSVUploader thisrace={thisrace.id}/>
       </div>
     )
+  }
+
+  function PreRace(params: any){
+    const thisrace = params.thisrace;
+    const signedup = params.data;
+    return(<div>
+      <SignMeUp data={signedup} thisrace={thisrace}/>
+      <SignOthersUp data={signedup} thisrace={thisrace}/>
+      <div><Link href={`checkin/${thisrace.id}`}>check-in this race (admin)</Link></div>
+    </div>)
+  }
+
+  function PostRace(params: any){
+    const thisrace = params.thisrace;
+    const signedup = params.signedup;
+    return(<div>
+      
+    </div>)
   }
 
   async function SignMeUp(params: any)
@@ -75,5 +92,17 @@ export default async function Page({ params }: { params: { raceid: number } }) {
             <button type="submit">TEST FEATURE: sign user up by ID</button>
           </form>
       </div>
+    );
+  }
+
+  function CSVUploader(params: {thisrace: number}){
+    return (
+      <form action="/api/uploadcsv" method="post" encType="multipart/form-data">
+            <div>
+              <input type="file" id="csv" name="csv"/>
+              <input type="hidden" id="raceid" name="raceid" value={params.thisrace}/>
+            </div>
+            <button type="submit">Upload CSV</button>
+          </form>
     );
   }
