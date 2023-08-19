@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
 
   function AssignedUsers(params: any)
   {
-    const userlist = params.userinfo.map((user: User, index: number) => <SignedRunner runner={user} signup={params.signupinfo[index]}/>);
+    const userlist = params.userinfo.map((user: User, index: number) => <SignedRunner runner={user} runnersignup={params.signupinfo[index]}/>);
     
     return(
       <div>
@@ -44,14 +44,14 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   function SignedRunner(params: any)
   {
     const runner: User = params.runner;
-    const signup: Signup = params.signup;
+    const runnersignup: Signup = params.runnersignup;
     const age = getUserAge(runner);
     return(
         <div>
             First: {runner.firstname} |
             Last: {runner.lastname} |
             Age: {age}
-            <CheckInStatus signup={signup}/>
+            <CheckInStatus signup={runnersignup}/>
         </div>
     )
   }
@@ -59,16 +59,16 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   function CheckInStatus(params: {signup: Signup}){
     async function checkIn() {
         'use server'
-        const racesignups: Signup[] = await db.select().from(signups).where(eq(signups.id,params.signup.raceid));
+        const racesignups: Signup[] = await db.select().from(signups).where(eq(signups.raceid,params.signup.raceid));
         let bibs = racesignups.map(x => x.bibnumber);
         bibs.sort();
-        const newbib = (bibs[-1] ?? 0) + 1;
+        const newbib = (bibs[bibs.length-1] ?? 0) + 1;
         await db.update(signups)
         .set({ checkedin: true, bibnumber: newbib })
         .where(eq(signups.id, params.signup.id));
         revalidatePath(`/races/checkin/${params.signup.raceid}`)
       }
-    if(params.signup.checkedin){
+    if(params.signup.bibnumber){
         return(<>| Bib#: {params.signup.bibnumber}</>)};
 
     return(

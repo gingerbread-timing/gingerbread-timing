@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         placement.raceid = raceid;
         placement.userid = newid;
         placement.bibnumber = parseInt(entry["Bib"])
-        //placement.totaltime
+        placement.totaltime = clockToSeconds(entry["Clock Time"])
         placements.push(placement);
         resultusers.push(resultuser);
     }
@@ -58,4 +58,14 @@ export async function POST(request: Request) {
 
     //redirect to the user list; change the string literal for other site locations 
     return NextResponse.redirect(new URL('/', request.url), 302);
+}
+
+function clockToSeconds(clocktime: string){
+    let clocksplit = clocktime.split(":")
+    let seconds = 0
+    seconds += parseFloat(clocksplit.pop() ?? "0")
+    seconds += parseFloat(clocksplit.pop() ?? "0")*60
+    seconds += parseFloat(clocksplit.pop() ?? "0")*3600
+    console.log(seconds)
+    return seconds;
 }

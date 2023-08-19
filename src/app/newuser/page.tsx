@@ -4,7 +4,7 @@ import '@/globals.css';
 import { redirect } from 'next/navigation';
 
 export default function Home() {
-    //fields need to be matched on api/route.ts in the NewRace object
+    //fields need to be matched on api/route.ts in the NewUser object
     //date and/or time fields will break the 'insert' if they are null so keep them required
     const { user, error, isLoading } = useUser();
 

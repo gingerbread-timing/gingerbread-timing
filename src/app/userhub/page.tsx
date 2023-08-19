@@ -19,10 +19,11 @@ export default withPageAuthRequired(
       const racemap = racelist.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
     return (
       <div>
-        Hello {internalUser.firstname}
-        <div>these are the races you're signed up for.</div>
+        <h2>{internalUser.firstname} {internalUser.lastname}</h2>
+        <div>STATS ABOUT PERSONAL RACE PERFORMANCE HERE</div>
+        <div>these are the races you're signed up for:</div>
         {racemap}
-        <Link href="/adminhub"><h1>Admin Hub</h1></Link>
+        <Link href="/adminhub"><h2>Admin Hub</h2></Link>
       </div>
       
     )

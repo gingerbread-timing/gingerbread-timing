@@ -26,3 +26,6 @@ export type NewUser = InferModel<typeof users, "insert">;
 export type NewRace = InferModel<typeof races, "insert">;
 export type NewSignup = InferModel<typeof signups, "insert">;
 
+//join types
+export type UserSignup = {users: User, signups: Signup}
+

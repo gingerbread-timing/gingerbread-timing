@@ -7,7 +7,6 @@ export async function POST(request: Request) {
     const data = await request.formData();
     const form = Object.fromEntries(data);
     const birthday = new Date(String(form.birthday));
-    console.log(birthday);
     const finalbirthday = new Date(birthday.getTime() + 1);
 
     //parse the form data into the corresponding db ORM fields
