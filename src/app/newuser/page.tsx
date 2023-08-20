@@ -25,7 +25,7 @@ export default function Home() {
                     </div>
                     <div className="vertical">
                         <label htmlFor="lastname">Last Name:</label>
-                        <input className="textField" type="text" id="lastname" name="lastname" minLength={2} maxLength={20}/>
+                        <input className="textField" type="text" id="lastname" name="lastname" required minLength={2} maxLength={20}/>
                     </div>
                     
                     <div style={{display: 'flex'}}>

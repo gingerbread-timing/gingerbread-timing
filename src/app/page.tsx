@@ -11,10 +11,16 @@ import { RaceDisplay } from './racedisplay';
 import './homestyles.css'
 
 const result: Race[] = await db.select().from(races);
+const sortedraces = result.sort((r1, r2) => r1.starttime > r2.starttime ? 1 : -1)
+const today = new Date()
+const upcomingraces = sortedraces.filter(x => x.starttime > today)
+const pastraces = sortedraces.filter(x => x.starttime < today)
+
+const upmap = upcomingraces.map((item,index) => {return(<RaceDisplay myrace={item} key={index}/>);});
+const pastmap = pastraces.map((item,index) => {return(<RaceDisplay myrace={item} key={index}/>);});
 
 export default function Home() {
   //build a list of races based on the race table, then pass the race object as a parameter to the component
-  const racelist = result.map((race,index) => {return(<RaceDisplay myrace={race} key={index}/>);});
   return (
     <div>
       <Image
@@ -56,7 +62,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {racelist}
+      {upmap}
+      {pastmap}
     </div>
   )
 }

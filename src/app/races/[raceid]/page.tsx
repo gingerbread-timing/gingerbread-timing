@@ -39,6 +39,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     const thisrace = params.thisrace;
     const signedup = params.data;
     return(<div>
+      {/*@ts-expect-error Async Server Component*/}
       <SignMeUp data={signedup} thisrace={thisrace}/>
       <div><Link href={`checkin/${thisrace.id}`}><h3>check-in this race</h3></Link></div>
     </div>)

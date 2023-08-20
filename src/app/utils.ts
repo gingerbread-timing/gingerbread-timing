@@ -37,5 +37,11 @@ export function getStringDate(date?: Date){
 
 export function getStringTime(date?: Date){
   if(!date) {return 'INVALID DATE'}
-  return `${date?.getHours()}:${date?.getMinutes()}`;
+  let hour = date?.getHours();
+  let ampm = "AM"
+  if(hour > 12){
+    hour -= 12
+    ampm = "PM"
+  }
+  return `${hour}:${String(date?.getMinutes()).padStart(2,'0')} ${ampm}`;
 }

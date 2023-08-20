@@ -1,0 +1,1 @@
+ALTER TABLE `signups` DROP COLUMN `checkedin`;

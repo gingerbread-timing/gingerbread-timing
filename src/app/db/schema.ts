@@ -46,7 +46,6 @@ export const signups = mysqlTable("signups", {
   totaltime: float('totaltime'),
   completed: boolean('completed'),
   paid: boolean('paid'),
-  checkedin: boolean('checkedin'),
   signupdate: timestamp('signupdate')
 });
 

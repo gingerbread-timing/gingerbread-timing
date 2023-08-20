@@ -16,13 +16,21 @@ export default withPageAuthRequired(
     const racelist = await db.select().from(races)
       .innerJoin(signups, eq(races.id,signups.raceid))
       .where(eq(signups.userid,internalUser.id));
-      const racemap = racelist.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
+    const sortedraces = racelist.sort((r1, r2) => r1.races.starttime > r2.races.starttime ? 1 : -1)
+    const today = new Date()
+    const upcomingraces = sortedraces.filter(x => x.races.starttime > today)
+    const pastraces = sortedraces.filter(x => x.races.starttime < today)
+
+    const upmap = upcomingraces.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
+    const pastmap = pastraces.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
     return (
       <div>
         <h2>{internalUser.firstname} {internalUser.lastname}</h2>
         <div>STATS ABOUT PERSONAL RACE PERFORMANCE HERE</div>
-        <div>these are the races you're signed up for:</div>
-        {racemap}
+        <h3>Upcoming races:</h3>
+        {upmap}
+        <h3>Completed races:</h3>
+        {pastmap}
         <Link href="/adminhub"><h2>Admin Hub</h2></Link>
       </div>
       
