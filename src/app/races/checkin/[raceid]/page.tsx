@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
         bibs.sort();
         const newbib = (bibs[bibs.length-1] ?? 0) + 1;
         await db.update(signups)
-        .set({ checkedin: true, bibnumber: newbib })
+        .set({ bibnumber: newbib })
         .where(eq(signups.id, params.signup.id));
         revalidatePath(`/races/checkin/${params.signup.raceid}`)
       }
