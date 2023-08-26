@@ -31,12 +31,12 @@ export default function Home() {
                     <div style={{display: 'flex'}}>
                         <div className="vertical" style={{width: '300px'}}>
                             <label htmlFor="birthday">Date of Birth:</label>
-                            <input className="textField" type="date" id="birthday" name="birthday"/>
+                            <input className="textField" type="date" id="birthday" name="birthday" required />
                         </div>
                         <div className="vertical" style={{width: '250px', margin: '0px 50px'}}>
                             <label htmlFor="gender">Gender:</label>
-                            <select className="dropDown" name="gender" id="gender">
-                                <option value="unselected">Select an Option:</option>
+                            <select className="dropDown" name="gender" id="gender" required >
+                                <option value="">Select an Option:</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                                 <option value="non-binary">Non-Binary</option>
@@ -45,7 +45,7 @@ export default function Home() {
                         </div>
                         <div className="vertical" style={{width: '300px'}}>
                             <label htmlFor="phone">Phone Number: (###-###-####)</label>
-                            <input className="textField" type="tel" id="phone" name="phone" required minLength={10}/>
+                            <input className="textField" type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required minLength={10}/>
                         </div>
                     </div>
 
@@ -56,8 +56,8 @@ export default function Home() {
                         </div>
                         <div className="vertical" style={{width: '175px', margin: '0px 50px'}}>
                             <label htmlFor="country">Country:</label>
-                            <select className="dropDown" id="country" name="country">
-                                <option>select country</option>
+                            <select className="dropDown" id="country" name="country" required>
+                                <option value="">select country</option>
                                 <option value="AF">Afghanistan</option>
                                 <option value="AX">Aland Islands</option>
                                 <option value="AL">Albania</option>
@@ -313,8 +313,8 @@ export default function Home() {
                             </select>
                         </div>
                         <div className="vertical" style={{width: '175px'}}>
-                            <label htmlFor="zip">Zip Code:</label>
-                            <input className="textField" type="number" id="zip" name="zip" required minLength={5}/>
+                            <label htmlFor="zip">Zip Code: (#####)</label>
+                            <input className="textField" type="text" id="zip" name="zip" pattern="[0-9]{5}" required />
                         </div>
                     </div>
 
@@ -325,8 +325,8 @@ export default function Home() {
                         </div>
                         <div className="vertical" style={{width: '175px', marginLeft: '50px', marginRight: '375px'}}>
                                 <label htmlFor="state">State:</label>
-                                <select className="dropDown" id="state" name="state">
-                                <option>select state</option>
+                                <select className="dropDown" id="state" name="state" required>
+                                <option value="">select state</option>
                                 <option value="AL">Alabama</option>
                                 <option value="AK">Alaska</option>
                                 <option value="AZ">Arizona</option>
@@ -378,6 +378,7 @@ export default function Home() {
                                 <option value="WV">West Virginia</option>
                                 <option value="WI">Wisconsin</option>
                                 <option value="WY">Wyoming</option>
+                                <option value="--">Outside the US</option>
                                 </select>                     
                         </div>
                   </div>       
@@ -386,11 +387,11 @@ export default function Home() {
             </div>
                 <div className="vertical">
                     <label htmlFor="emergencyname">Emergency Contact Name:</label>
-                    <input className="textField" type="text" id="emergencyname" name="emergencyname" required minLength={5}/>
+                    <input className="textField" type="text" id="emergencyname" name="emergencyname" required minLength={3}/>
                 </div>
                 <div className="vertical">
-                    <label htmlFor="emergencyphone">Emergency Contact Phone Number:</label>
-                    <input className="textField" type="text" id="emergencyphone" name="emergencyphone" required minLength={5}/>
+                    <label htmlFor="emergencyphone">Emergency Contact Phone Number: (###-###-####)</label>
+                    <input className="textField" type="text" id="emergencyphone" name="emergencyphone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required minLength={5}/>
                 </div>
                     <button className="submitButton" type="submit">Register</button>
                 </form>
