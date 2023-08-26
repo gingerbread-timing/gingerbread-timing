@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     //insert everything else
 
     //redirect to the user list; change the string literal for other site locations 
-    return NextResponse.redirect(new URL('/', request.url), 302);
+    return NextResponse.redirect(new URL(`/races/${raceid}`, request.url), 302);
 }
 
 function clockToSeconds(clocktime: string){

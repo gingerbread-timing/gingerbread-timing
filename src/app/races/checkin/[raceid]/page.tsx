@@ -57,23 +57,42 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   }
 
   function CheckInStatus(params: {signup: Signup}){
-    async function checkIn() {
+    async function checkIn(form: FormData) {
         'use server'
         const racesignups: Signup[] = await db.select().from(signups).where(eq(signups.raceid,params.signup.raceid));
         let bibs = racesignups.map(x => x.bibnumber);
         bibs.sort();
-        const newbib = (bibs[bibs.length-1] ?? 0) + 1;
+        const formobj = Object.fromEntries(form);
+        var newbib = 0
+        if(formobj.bib)
+        {
+          newbib = parseInt(formobj.bib as string) ?? 0;
+          if(bibs.includes(newbib))
+          {
+            //alertService.error("That bib number is already in use!", {autoClose: true})
+            return false
+          }
+        }
+        if(newbib == 0){
+          newbib = (bibs[bibs.length-1] ?? 0) + 1;
+        }
         await db.update(signups)
-        .set({ checkedin: true, bibnumber: newbib })
+        .set({ bibnumber: newbib })
         .where(eq(signups.id, params.signup.id));
         revalidatePath(`/races/checkin/${params.signup.raceid}`)
       }
-    if(params.signup.bibnumber){
-        return(<>| Bib#: {params.signup.bibnumber}</>)};
-
+    const conflict = 0 //= includesMultiple(bibs, params.signup.bibnumber)
     return(
+      <div>
+        {params.signup.bibnumber && <>| Bib#: {params.signup.bibnumber}</>}
+        {conflict && <>| BIB CONFLICT</>}
         <form action={checkIn}>
+            <label htmlFor="bib">Assign Bib:</label>
+            <input type="number" id="bib" name="bib"/>
             <button type="submit">Check In</button>
         </form>
+      </div>
     );
   }
+
+  

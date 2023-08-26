@@ -36,7 +36,7 @@ export function getStringDate(date?: Date){
 }
 
 export function getStringTime(date?: Date){
-  if(!date) {return 'INVALID DATE'}
+  if(!date) {return 'INVALID TIME'}
   let hour = date?.getHours();
   let ampm = "AM"
   if(hour > 12){
