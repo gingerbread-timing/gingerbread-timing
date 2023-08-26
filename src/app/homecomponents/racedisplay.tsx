@@ -1,12 +1,13 @@
-import { Race } from './db/dbstuff';
+import { Race } from '../db/dbstuff';
 import Link from 'next/link';
-import { getStringDate, getStringTime } from './utils';
+import { getStringDate, getStringTime } from '../clienttools';
 export function RaceDisplay(props: any){
     //see schema.ts for which fields you have access to through the Race object
     const race: Race = props.myrace;
     const start = race.starttime;
     const fullDate = getStringDate(start);
     const fullTime = getStringTime(start);
+    
   
     //return our data from the db plus a dynamic route link based on the race ID
     return (

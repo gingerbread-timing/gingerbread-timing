@@ -1,10 +1,12 @@
 //db imports
 import { db, Race, Signup, User, UserSignup } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
-import { getInternalUser, getStringDate, getStringTime, getUserAge } from '@/utils';
+import { getInternalUser } from '@/servertools';
+import { getStringDate, getStringTime, getUserAge } from '@/clienttools';
 import { getSession } from '@auth0/nextjs-auth0';
 import { eq } from "drizzle-orm";
 import Link from 'next/link';
+import { CSVLink } from "react-csv";
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
@@ -18,7 +20,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   //otherwise, grab the result and return a page populated with that row of races
   const thisrace: Race = result[0];
   const today = new Date();
-  const signedup = await db.select().from(users)
+  const signedup: UserSignup[] = await db.select().from(users)
     .innerJoin(signups, eq(users.id,signups.userid))
     .where(eq(signups.raceid,thisrace.id));
     return (
@@ -123,3 +125,10 @@ export default async function Page({ params }: { params: { raceid: number } }) {
           </form>
     );
   }
+
+  // function CSVDownloader(params: {signedup: UserSignup[]}){
+  //   const header = {place: number, bib: number, name: string, gender: string, genderplace: string, age: number, ageplace: string, city: string, state: string, clocktime: string, chiptime: string, pace: string}
+
+  //   for(var signup)
+  //   return(<CSVLink data={csvData}>Download CSV</CSVLink>)
+  // }

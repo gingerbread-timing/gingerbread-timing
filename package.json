@@ -21,7 +21,9 @@
     "neat-csv": "^7.0.0",
     "next": "13.4.6",
     "react": "18.2.0",
+    "react-csv": "^2.2.2",
     "react-dom": "18.2.0",
+    "react-toastify": "^9.1.3",
     "supports-color": "^8.1.1",
     "typescript": "5.1.3"
   },

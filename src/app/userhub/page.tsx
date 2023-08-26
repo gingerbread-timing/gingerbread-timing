@@ -2,8 +2,8 @@ import { withPageAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { db, Race } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
 import { eq } from "drizzle-orm";
-import { getInternalUser } from '@/utils';
-import { RaceDisplay } from '@/racedisplay';
+import { getInternalUser } from '@/servertools';
+import { RaceDisplay } from '@/homecomponents/racedisplay';
 import Link from 'next/link'
 
 export default withPageAuthRequired(

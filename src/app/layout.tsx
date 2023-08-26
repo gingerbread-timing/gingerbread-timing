@@ -3,7 +3,11 @@ import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import React from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import Profile from './usernamebar';
+import Profile from './homecomponents/usernamebar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Image  from 'next/image';
+import logo from '@/images/Gingerbread.jpg';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,9 +26,10 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
         <div className='navbar'>
-          <Link href="/">Home</Link>
+          <Link href="/"><Image src={logo} alt='gingerbread' className='logo'/></Link>
           <Profile/>
         </div>
+        <ToastContainer position='top-center' autoClose={5000} closeOnClick theme='light'/>
           {children}
           </body>
       </html>
