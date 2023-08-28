@@ -2,11 +2,11 @@
 import { db, Race, Signup, User, UserSignup } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
 import { getInternalUser } from '@/servertools';
-import { getStringDate, getStringTime, getUserAge } from '@/clienttools';
+import { getStringDate, getStringTime, getUserAge, getClockFromSeconds } from '@/clienttools';
 import { getSession } from '@auth0/nextjs-auth0';
 import { eq } from "drizzle-orm";
 import Link from 'next/link';
-import { CSVLink } from "react-csv";
+import CSVDownloadLink from './downloadlink';
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
@@ -33,6 +33,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
         {(thisrace.starttime > today) && <PreRace data={signedup} thisrace={thisrace}/>}
         {(thisrace.endtime < today) && <PostRace signedup={signedup} thisrace={thisrace}/>}
         <CSVUploader thisrace={thisrace.id}/>
+        <CSVDownloader signedup={signedup} thisrace={thisrace}/>
       </div>
     )
   }
@@ -74,7 +75,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     const runner: User = params.runner;
     const runnersignup: Signup = params.runnersignup;
     const age = getUserAge(runner);
-    const clocktime = new Date((runnersignup.totaltime ?? 0) * 1000).toISOString().slice(11, 20);
+    const clocktime = getClockFromSeconds(runnersignup.totaltime);
     return(
         <div>
             Placement: {params.place+1} |
@@ -126,9 +127,20 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     );
   }
 
-  // function CSVDownloader(params: {signedup: UserSignup[]}){
-  //   const header = {place: number, bib: number, name: string, gender: string, genderplace: string, age: number, ageplace: string, city: string, state: string, clocktime: string, chiptime: string, pace: string}
-
-  //   for(var signup)
-  //   return(<CSVLink data={csvData}>Download CSV</CSVLink>)
-  // }
+  function CSVDownloader(params: {signedup: UserSignup[], thisrace: Race}){
+    let csvData = [] as any
+    if(!params.signedup) return (<>No data to download!</>)
+    for(var signup of params.signedup){
+      csvData.push({
+        Name: `${signup.users.firstname} ${signup.users.lastname}`, 
+        Gender: signup.users.gender.slice(0,1),
+        //genderplace
+        Age: getUserAge(signup.users),
+        City: signup.users.city,
+        State: signup.users.state,
+        Clocktime: getClockFromSeconds(signup.signups.totaltime)
+        //pace 
+      })
+    }
+    return(<CSVDownloadLink csvData={csvData} thisrace={params.thisrace}/>)
+  }

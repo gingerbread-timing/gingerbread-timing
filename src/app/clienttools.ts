@@ -26,3 +26,7 @@ export function getStringTime(date?: Date){
   }
   return `${hour}:${String(date?.getMinutes()).padStart(2,'0')} ${ampm}`;
 }
+
+export function getClockFromSeconds(seconds: number | null){
+    return new Date((seconds ?? 0) * 1000).toISOString().slice(11, 20);
+}

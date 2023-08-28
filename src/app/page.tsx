@@ -18,7 +18,6 @@ export default function Home() {
   //build a list of races based on the race table, then pass the race object as a parameter to the component
   return (
     <div>
-      
       <SearchableRaces races={sortedraces}/>
     </div>
   )
