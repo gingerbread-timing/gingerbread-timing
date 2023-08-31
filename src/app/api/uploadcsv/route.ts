@@ -2,6 +2,7 @@ import { db, NewSignup, NewUser} from '@/db/dbstuff';
 import { signups, users } from '@/db/schema';
 import { NextResponse } from 'next/server';
 import neatCsv from 'neat-csv';
+import { desc, eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
     //convert the incoming form request to a usable object
@@ -19,14 +20,26 @@ export async function POST(request: Request) {
     //pull csv from file and parse it into object
     const parsed = await neatCsv(buffer,{skipLines: 1});
     
-    const userlist = await db.select().from(users);
-    let newid = userlist.pop()?.id ?? 0;
+    const userlist = await db.select().from(users).orderBy(desc(users.id)).limit(1);
+    let newid = userlist[0].id ?? 0;
     let resultusers = [] as NewUser[]
-    let placements = [] as NewSignup[]
-    //match headers to signup columns
+    let newplacements = [] as NewSignup[]
+    
+    let timings = [] as {signupid: number, time: number}[]
+    const signedup = await db.select().from(signups).where(eq(signups.raceid, raceid))
+
     for(var entry of parsed){
+        const newbib = parseInt(entry["Bib"])
+        const usertiming = clockToSeconds(entry["Clock Time"])
+        //check if signups contain bib number- if so, attach timing to signup
+        const bibmatch = signedup.filter(sign => {return sign.bibnumber === newbib})
+        if(bibmatch[0]){
+            if(!usertiming) continue
+            timings.push({signupid: bibmatch[0].id, time: usertiming})
+            continue
+        }
+        //otherwise, generate a new user and signup
         newid++;
-        
         let resultuser = {} as NewUser
         const splitname = entry["Name"].split(" ");
         resultuser.firstname = splitname[0]
@@ -41,26 +54,26 @@ export async function POST(request: Request) {
         let placement = {} as NewSignup
         placement.raceid = raceid;
         placement.userid = newid;
-        placement.bibnumber = parseInt(entry["Bib"])
-        placement.totaltime = clockToSeconds(entry["Clock Time"])
-        placements.push(placement);
+        placement.bibnumber = newbib
+        if(usertiming) placement.totaltime = usertiming
+        newplacements.push(placement);
         resultusers.push(resultuser);
     }
 
-    await db.insert(signups).values(placements);
-    await db.insert(users).values(resultusers);
-
-    //identify csv entries against users
-
-    //update signups where we have matches
-
-    //insert everything else
-
-    //redirect to the user list; change the string literal for other site locations 
+    await db.transaction(async (tx) => {
+        if(newplacements.length > 0){
+            await tx.insert(signups).values(newplacements);
+            await tx.insert(users).values(resultusers);}
+        if(timings.length > 0){
+            for(var timing of timings){
+                await tx.update(signups).set({totaltime: timing.time})
+                .where(eq(signups.id, timing.signupid))}}})
+                
     return NextResponse.redirect(new URL(`/races/${raceid}`, request.url), 302);
 }
 
-function clockToSeconds(clocktime: string){
+function clockToSeconds(clocktime: string | null){
+    if(!clocktime) return null
     let clocksplit = clocktime.split(":")
     let seconds = 0
     seconds += parseFloat(clocksplit.pop() ?? "0")

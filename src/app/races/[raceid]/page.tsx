@@ -129,17 +129,17 @@ export default async function Page({ params }: { params: { raceid: number } }) {
 
   function CSVDownloader(params: {signedup: UserSignup[], thisrace: Race}){
     let csvData = [] as any
-    if(!params.signedup) return (<>No data to download!</>)
+    if(params.signedup.length === 0) return (<>No data to download!</>)
     for(var signup of params.signedup){
       csvData.push({
+        Bib: signup.signups.bibnumber,
         Name: `${signup.users.firstname} ${signup.users.lastname}`, 
         Gender: signup.users.gender.slice(0,1),
-        //genderplace
         Age: getUserAge(signup.users),
         City: signup.users.city,
         State: signup.users.state,
         Clocktime: getClockFromSeconds(signup.signups.totaltime)
-        //pace 
+        //division
       })
     }
     return(<CSVDownloadLink csvData={csvData} thisrace={params.thisrace}/>)
