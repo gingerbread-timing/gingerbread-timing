@@ -2,13 +2,13 @@
 import { User, Signup, UserSignup } from '@/db/dbstuff';
 import { CheckInForm } from './checkinform';
 import { getUserAge } from '@/clienttools';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 export default function FindCheckIn(params: {signedup: UserSignup[]})
   {
     if(params.signedup.length == 0) return (<>Nobody is currently signed up for this race.</>)
     const [search, setSearch] = useState("")
-    const onChange = (event: any) => {
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
       };
     
