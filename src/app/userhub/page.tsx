@@ -4,7 +4,8 @@ import { races, users, signups } from '@/db/schema';
 import { eq } from "drizzle-orm";
 import { getInternalUser } from '@/servertools';
 import { RaceDisplay } from '@/homecomponents/racedisplay';
-import Link from 'next/link'
+import Link from 'next/link';
+import 'bootstrap/dist/css/bootstrap.css';
 
 export default withPageAuthRequired(
   async function Profile() {
@@ -24,17 +25,62 @@ export default withPageAuthRequired(
     const upmap = upcomingraces.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
     const pastmap = pastraces.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
 
-    //stats to show: races run. total miles run. average pace. runs/year
+    //stats to show: races run. total miles run. Avg pace. runs/year
 
     return (
-      <div className='pagecontainer'>
-        <h1>{internalUser.firstname} {internalUser.lastname}</h1>
-        <div className='statrow'>STATS ABOUT PERSONAL RACE PERFORMANCE HERE</div>
+      <div className="container-md">
+        <div className="row" style={{paddingTop: '1em'}}>
+          <div className="col">
+            <h1>{internalUser.firstname} {internalUser.lastname}</h1>
+          </div>
+          <div className="col"></div>
+          <div className="col">
+            <div>
+             <Link href="/adminhub"><h2>Admin Hub</h2></Link>
+            </div>
+          </div>
+        </div>
+        <div className="text-center" style={{paddingTop: '2em', fontWeight: 'bolder'}}>Races</div>
+        <div className="row">
+          <div className="col">
+            <div>Total Ran: </div>
+          </div>
+          <div className="col">
+            <div>Ran This Year: </div>
+          </div>
+          <div className="col">
+            <div>Avg/Year: </div>
+          </div>
+        </div>
+        <div className="text-center" style={{paddingTop: '2em', fontWeight: 'bolder'}}>Miles</div>
+        <div className="row">
+          <div className="col">
+            <div>Total Ran: </div>
+          </div>
+          <div className="col">
+            <div>Ran This Year: </div>
+          </div>
+          <div className="col">
+            <div>Avg/Year: </div>
+          </div>
+        </div>
+        <div className="text-center" style={{paddingTop: '2em', fontWeight: 'bolder'}}>Speed</div>
+        <div className="row" style={{paddingBottom: '2em'}}>
+          <div className="col">
+            <div>Avg Mile(Total): </div>
+          </div>
+          <div className="col">
+            <div>Avg Mile(Last Race): </div>
+          </div>
+          <div className="col">
+            <div>Avg Mile(This Year): </div>
+          </div>
+        </div>
+
         <h2>Upcoming Races</h2>
         {upmap}
         <h3>Completed Races</h3>
         {pastmap}
-        <Link href="/adminhub"><h2>Admin Hub</h2></Link>
       </div>
       
     )
