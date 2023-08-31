@@ -17,7 +17,7 @@ const sortedraces = result.sort((r1, r2) => r1.starttime > r2.starttime ? 1 : -1
 export default function Home() {
   //build a list of races based on the race table, then pass the race object as a parameter to the component
   return (
-    <div>
+    <div className='pagecontainer'>
       <SearchableRaces races={sortedraces}/>
     </div>
   )

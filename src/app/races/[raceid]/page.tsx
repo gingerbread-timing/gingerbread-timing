@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { ResultsDisplay } from './findresult';
 import Link from 'next/link';
 import CSVDownloadLink from './downloadlink';
+import './styles.css'
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
@@ -25,12 +26,16 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     .innerJoin(signups, eq(users.id,signups.userid))
     .where(eq(signups.raceid,thisrace.id));
     return (
-      <div>
-        <h1>{thisrace.name}</h1>
-        <div>Description: {thisrace.description}</div>
-        <div>Date: {getStringDate(thisrace.starttime)}</div>
-        <div>Start Time: {getStringTime(thisrace.starttime)}</div>
-        <div>End Time: {getStringTime(thisrace.endtime)}</div>
+      <div className='pagecontainer'>
+        <div className='backgroundimage'>
+          <div className='racename'>{thisrace.name}</div>
+          <hr/>
+          <div className='racecore'>{getStringDate(thisrace.starttime)}</div>
+          <div className='racecore'>LOCAtiON HERE</div>
+          <div className='racecore'>{getStringTime(thisrace.starttime)} - {getStringTime(thisrace.endtime)}</div>
+        </div>
+        <h1>Description</h1>
+        <div>{thisrace.description}</div>
         {(thisrace.starttime > today) && <PreRace data={signedup} thisrace={thisrace}/>}
         {(thisrace.endtime < today) && <PostRace signedup={signedup} thisrace={thisrace}/>}
         <CSVUploader thisrace={thisrace.id}/>
@@ -55,7 +60,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     const sortedsigns = signedup.sort((s1: UserSignup, s2: UserSignup) => (s1.signups.totaltime ?? 0) > (s2.signups.totaltime ?? 0) ? 1 : -1)
     //sort signups by time and map them
     return(<div>
-      <h2>RESULTS:</h2>
+      <h2>RESULTS</h2>
       <ResultsDisplay signs={sortedsigns}/>
     </div>)
   }
@@ -66,7 +71,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   {
     //if there's no login, prompt the user to login
     const session =  await getSession();
-    if(!session) return (<h2>Log in to sign up for this race!</h2>);
+    if(!session) return (<h2><a href="/api/auth/login">Log in</a> to sign up for this race!</h2>);
 
     //if the logged in user is already signed up, let them know
     const userlist = params.data.map((user: any) => user.users.id);

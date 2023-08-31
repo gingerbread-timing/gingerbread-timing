@@ -1,4 +1,4 @@
-import { serial, text, timestamp, mysqlTable, datetime, varchar, int, float, boolean } from "drizzle-orm/mysql-core";
+import { serial, text, timestamp, mysqlTable, datetime, varchar, int, float, boolean, smallint, tinyint } from "drizzle-orm/mysql-core";
  
 export const users = mysqlTable("users", {
   id: serial("id"),
@@ -26,8 +26,10 @@ export const races = mysqlTable("races", {
   routeURL: varchar("routeurl", {length: 2048}),
   heroURL: varchar("herourl", {length: 2048}),
   location: varchar("location", {length: 2048}),
+  length: smallint("length").notNull(),
   starttime: datetime("starttime").notNull(),
   endtime: datetime("endtime").notNull(),
+  price: tinyint("price").notNull(),
   description: text("description").notNull(),
   contactemail: varchar("contactemail", {length: 255}),
   instagram: varchar("instagram", {length: 255}),

@@ -36,32 +36,10 @@
 .bottomInfoHolder{
     width: 100%;
     height: 2em;
+    font-size: 1.5em;
     background-color: #B09070;
     display: flex;
-    justify-content: center;
-    align-items: center;
     color: white;
-}
-.raceNameHolder{
-width: 33%;
-}
-.date{
-width: 33%;
-}
-.description{
-width: 20%;
-text-align: center;
+    justify-content: space-around;
 }
 
-.NamesOfRaces{
-    width: 20%;
-    padding-left: 30px;
-}
-.descInfo{
-    width: 20%;
-    padding-left: 30px;
-}
-.dateAndTime{
-    width: 20%;
-    padding-left: 30px;
-}

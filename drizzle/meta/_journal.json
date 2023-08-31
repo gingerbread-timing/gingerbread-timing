@@ -22,6 +22,20 @@
       "when": 1692542391621,
       "tag": "0006_mighty_toad",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1693501848793,
+      "tag": "0007_tranquil_maestro",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1693502264997,
+      "tag": "0008_smart_vector",
+      "breakpoints": true
     }
   ]
 }

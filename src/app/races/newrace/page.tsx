@@ -28,6 +28,14 @@ export default function Home() {
                 <input type="datetime-local" id="endtime" name="endtime" required/>
             </div>
             <div>
+                <label htmlFor="length">Length:</label>
+                <input type="number" id="length" name="length" required/>
+            </div>
+            <div>
+                <label htmlFor="price">Signup Price:</label>
+                <input type="number" id="price" name="price" required/>
+            </div>
+            <div>
                 <label htmlFor="description">Description:</label>
                 <input type="text" id="description" name="description" required minLength={5}/>
             </div>

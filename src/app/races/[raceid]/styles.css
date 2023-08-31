@@ -1,0 +1,17 @@
+.racecore{
+    text-align: center;
+    font-size: 2em;
+}
+
+.runnerresult{
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    justify-content: space-around;
+    background-color: white;
+    margin: 10px;
+    justify-self: center;
+    border: 1px solid black;
+    padding: 5px;
+    overflow: wrap;
+}

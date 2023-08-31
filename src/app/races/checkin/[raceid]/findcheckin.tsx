@@ -3,6 +3,7 @@ import { User, Signup, UserSignup } from '@/db/dbstuff';
 import { CheckInForm } from './checkinform';
 import { getUserAge } from '@/clienttools';
 import { ChangeEvent, useState } from 'react';
+import './styles.css'
 
 export default function FindCheckIn(params: {signedup: UserSignup[]})
   {
@@ -26,13 +27,19 @@ export default function FindCheckIn(params: {signedup: UserSignup[]})
     return(
       <div>
         <form noValidate action="" role="search" >
-                <input value={search} onChange={onChange}
-                  placeholder="Search users by full name"
-                  style={{ height:'20px',width:'280px',borderRadius:'10px', paddingLeft: '10px', marginTop: '5px',
-                marginLeft: '8px'}}
-                  title='Search bar'
-                />
-              </form>
+            <input value={search} onChange={onChange}
+                placeholder="Search users by full name"
+                style={{ height:'20px',width:'280px',borderRadius:'10px', paddingLeft: '10px', marginTop: '5px',
+            marginLeft: '8px'}}
+                title='Search bar'
+            />
+        </form>
+            <div className='checkin'>
+                <h3 className='listelement'>Name</h3>
+                <h3 className='listelement'>Age</h3>
+                <h3 className='listelement'>Bib #</h3>
+                <h3 className='listelement'>Assign Bib</h3>
+            </div>
           {display}
       </div>
     );
@@ -44,20 +51,12 @@ export default function FindCheckIn(params: {signedup: UserSignup[]})
     const runnersignup: Signup = params.runnersignup;
     const age = getUserAge(runner);
     return(
-        <div>
-            First: {runner.firstname} |
-            Last: {runner.lastname} |
-            Age: {age}
-            <CheckInStatus signup={runnersignup}/>
+        <div className='checkin'>
+            <div className='listelement'>{runner.firstname} {runner.lastname}</div>
+            <div className='listelement'>{age}</div>
+            {(runnersignup.bibnumber && <div className='listelement'>{runnersignup.bibnumber}</div>) 
+            || <div className='listelement'>Unassigned</div>}
+            <div className='listelement'><CheckInForm raceid={runnersignup.raceid} signupid={runnersignup.id} /></div>    
         </div>
     )
-  }
-
-  function CheckInStatus(params: {signup: Signup}){
-    return(
-      <>
-        {params.signup.bibnumber && <>| Bib#: {params.signup.bibnumber}</>}
-        <CheckInForm raceid={params.signup.raceid} signupid={params.signup.id} />
-      </>
-    );
   }

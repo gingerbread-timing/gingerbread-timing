@@ -19,9 +19,9 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     .innerJoin(signups, eq(users.id,signups.userid))
     .where(eq(signups.raceid,thisrace.id));
     return (
-      <div>
-        <h1>{thisrace.name}</h1>
-        <h2>Check in users</h2>
+      <div className='pagecontainer'>
+        <div className='racename'>{thisrace.name}</div>
+        <h2>Check-In</h2>
         <FindCheckIn  signedup={signedup}/>
       </div>
     )

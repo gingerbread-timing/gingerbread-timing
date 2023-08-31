@@ -1,0 +1,1 @@
+ALTER TABLE `races` ADD `price` tinyint NOT NULL;

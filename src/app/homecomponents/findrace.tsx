@@ -40,20 +40,19 @@ export default function SearchableRaces(params: {races: Race[]})
 
 function HeaderBar(){
     return(
-    <>
-        <div className='bigInfoHolder'>
-          <div className='bottomInfoHolder'>
-            <div className='raceNameHolder'>
-              Race Name:
-            </div>
-            <div className='date'>
-              Start Date & Time:
-            </div>
-            <div className='description'>
-              Description:
-            </div>
+      <>
+        <div className='bottomInfoHolder'>
+          <div className='listelement'>
+            Race Name:
           </div>
-        </div></>)
+          <div className='listelement'>
+            Start Date & Time:
+          </div>
+          <div className='listelement'>
+            Description:
+          </div>
+      </div>
+      </>)
 }
 
 // const today = new Date()

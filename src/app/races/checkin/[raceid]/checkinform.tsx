@@ -11,7 +11,7 @@ export function CheckInForm(params: {raceid: number, signupid: number})
     }
     return(
         <form action={clientCheckIn} style={{display: "inline"}}>
-            <label htmlFor="bib"> Assign Bib:</label>
+            <label htmlFor="bib"></label>
             <input type="number" id="bib" name="bib"/>
             <input type="hidden" value={params.raceid} id="raceid" name="raceid"/>
             <input type="hidden" value={params.signupid} id="signupid" name="signupid"/>

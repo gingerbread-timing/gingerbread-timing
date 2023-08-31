@@ -2,6 +2,7 @@
 import { UserSignup, User, Signup } from "@/db/dbstuff";
 import { getUserAge, getClockFromSeconds } from '@/clienttools';
 import { useState } from "react";
+import './styles.css'
 
 export function ResultsDisplay(params: {signs: UserSignup[]})
   {
@@ -12,6 +13,8 @@ export function ResultsDisplay(params: {signs: UserSignup[]})
     return(
       <div>
         <form action={filterResults}>
+          <label htmlFor="name"> Name: </label>
+            <input type="text" id="name" name="name"/>
             <label htmlFor="gender"> Gender: </label>
             <select id="gender" name="gender">
                 <option value="all">All</option>
@@ -24,14 +27,24 @@ export function ResultsDisplay(params: {signs: UserSignup[]})
             <input type="number" id="agemax" name="agemax" size={3} maxLength={3}/>
             <button type="submit">Filter Results</button>
         </form>
+        <div className="runnerresult"style={{backgroundColor: "teal"}}>
+            <h3 className="listelement">Placement</h3>
+            <h3 className="listelement">Name</h3>
+            <h3 className="listelement">Age</h3>
+            <h3 className="listelement">Time</h3>
+        </div>
           {userlist}
       </div>
     );
     async function filterResults(formData: FormData){
         const gen = String(formData.get("gender")).toLowerCase()
         let display = [] as JSX.Element[]
+
+        const lowname = String(formData.get("name")).toLowerCase()
         for(let i = 0; i < params.signs.length; i++){
             const sign = params.signs[i]
+            const fullname = `${sign.users.firstname} ${sign.users.lastname}`.toLowerCase()
+            if(!fullname.includes(lowname ?? "")) continue
             if(gen != "all" && gen.charAt(0) != sign.users.gender.toLowerCase().charAt(0)) continue
             const age = getUserAge(sign.users)
             if(age < (parseInt(String(formData.get("agemin"))) ?? 0)
@@ -41,9 +54,6 @@ export function ResultsDisplay(params: {signs: UserSignup[]})
         setuserlist(display)
     }
   }
-
-  
-
   function ResultRunner(params: any)
   {
     const runner: User = params.runner;
@@ -51,11 +61,11 @@ export function ResultsDisplay(params: {signs: UserSignup[]})
     const age = getUserAge(runner);
     const clocktime = getClockFromSeconds(runnersignup.totaltime);
     return(
-        <div>
-            Placement: {params.place+1} |
-            Name: {runner.firstname} {runner.lastname} |
-            Age: {age} |
-            Time: {runnersignup.totaltime && <>{clocktime}</>}
+        <div className="runnerresult">
+            <div className="listelement">{params.place+1}</div>
+            <div className="listelement">{runner.firstname} {runner.lastname}</div>
+            <div className="listelement">{age}</div>
+            <div className="listelement">{runnersignup.totaltime && <>{clocktime}</>}</div>
         </div>
     )
   }

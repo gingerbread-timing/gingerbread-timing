@@ -23,13 +23,16 @@ export default withPageAuthRequired(
 
     const upmap = upcomingraces.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
     const pastmap = pastraces.map((item,index) => {return(<RaceDisplay myrace={item.races} key={index}/>);});
+
+    //stats to show: races run. total miles run. average pace. runs/year
+
     return (
-      <div>
-        <h2>{internalUser.firstname} {internalUser.lastname}</h2>
-        <div>STATS ABOUT PERSONAL RACE PERFORMANCE HERE</div>
-        <h3>Upcoming races:</h3>
+      <div className='pagecontainer'>
+        <h1>{internalUser.firstname} {internalUser.lastname}</h1>
+        <div className='statrow'>STATS ABOUT PERSONAL RACE PERFORMANCE HERE</div>
+        <h2>Upcoming Races</h2>
         {upmap}
-        <h3>Completed races:</h3>
+        <h3>Completed Races</h3>
         {pastmap}
         <Link href="/adminhub"><h2>Admin Hub</h2></Link>
       </div>
