@@ -28,5 +28,5 @@ export function getStringTime(date?: Date){
 }
 
 export function getClockFromSeconds(seconds: number | null){
-    return new Date((seconds ?? 0) * 1000).toISOString().slice(11, 20);
+    return new Date((seconds ?? 0) * 1000).toISOString().slice(11, 22);
 }

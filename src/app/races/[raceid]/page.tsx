@@ -1,10 +1,11 @@
 //db imports
-import { db, Race, Signup, User, UserSignup } from '@/db/dbstuff';
+import { db, Race, UserSignup } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
 import { getInternalUser } from '@/servertools';
 import { getStringDate, getStringTime, getUserAge, getClockFromSeconds } from '@/clienttools';
 import { getSession } from '@auth0/nextjs-auth0';
 import { eq } from "drizzle-orm";
+import { ResultsDisplay } from './findresult';
 import Link from 'next/link';
 import CSVDownloadLink from './downloadlink';
 
@@ -59,32 +60,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     </div>)
   }
 
-  function ResultsDisplay(params: {signs: UserSignup[]})
-  {
-    const userlist = params.signs.map((sign: UserSignup, index) => <ResultRunner runner={sign.users} runnersignup={sign.signups} place={index}/>);
-    
-    return(
-      <div>
-          {userlist}
-      </div>
-    );
-  }
-
-  function ResultRunner(params: any)
-  {
-    const runner: User = params.runner;
-    const runnersignup: Signup = params.runnersignup;
-    const age = getUserAge(runner);
-    const clocktime = getClockFromSeconds(runnersignup.totaltime);
-    return(
-        <div>
-            Placement: {params.place+1} |
-            Name: {runner.firstname} {runner.lastname} |
-            Age: {age} |
-            Time: {runnersignup.totaltime && <>{clocktime}</>}
-        </div>
-    )
-  }
+  
 
   async function SignMeUp(params: any)
   {

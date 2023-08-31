@@ -1,8 +1,8 @@
 import { db, Race, User, Signup } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
-import { getUserAge } from '@/clienttools';
 import { eq } from "drizzle-orm";
-import { CheckInForm } from './checkinform';
+import FindCheckIn from './findcheckin';
+
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
@@ -18,50 +18,15 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   const signedup = await db.select().from(users)
     .innerJoin(signups, eq(users.id,signups.userid))
     .where(eq(signups.raceid,thisrace.id));
-    const signedusers: User[] = signedup.map(instance => instance.users);
-    const signupinfo: Signup[] = signedup.map(instance => instance.signups);
     return (
       <div>
         <h1>{thisrace.name}</h1>
         <h2>Check in users</h2>
-        <AssignedUsers  userinfo={signedusers} signupinfo={signupinfo}/>
+        <FindCheckIn  signedup={signedup}/>
       </div>
     )
   }
 
-  function AssignedUsers(params: any)
-  {
-    const userlist = params.userinfo.map((user: User, index: number) => <SignedRunner runner={user} runnersignup={params.signupinfo[index]}/>);
-    
-    return(
-      <div>
-          {userlist}
-      </div>
-    );
-  }
-
-  function SignedRunner(params: any)
-  {
-    const runner: User = params.runner;
-    const runnersignup: Signup = params.runnersignup;
-    const age = getUserAge(runner);
-    return(
-        <div>
-            First: {runner.firstname} |
-            Last: {runner.lastname} |
-            Age: {age}
-            <CheckInStatus signup={runnersignup}/>
-        </div>
-    )
-  }
-
-  function CheckInStatus(params: {signup: Signup}){
-    return(
-      <div>
-        {params.signup.bibnumber && <>| Bib#: {params.signup.bibnumber}</>}
-        <CheckInForm raceid={params.signup.raceid} signupid={params.signup.id}/>
-      </div>
-    );
-  }
+  
 
   
