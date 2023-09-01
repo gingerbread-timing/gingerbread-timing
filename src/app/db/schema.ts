@@ -51,9 +51,7 @@ export const signups = mysqlTable("signups", {
   signupdate: timestamp('signupdate')
 });
 
-//timings
-//id
-//RaceId
-//SensorId
-//Checkpoint1
-//Checkpoint2
+export const admins = mysqlTable("admins", {
+  id: serial("id"),
+  email: varchar("email", {length: 255}).notNull()
+});

@@ -1,0 +1,11 @@
+.userrow{
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    justify-content: space-around;
+    background-color: white;
+    margin: 10px;
+    justify-self: center;
+    padding: 5px;
+    overflow: wrap;
+}

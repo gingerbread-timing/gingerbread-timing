@@ -36,6 +36,13 @@
       "when": 1693502264997,
       "tag": "0008_smart_vector",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1693590193578,
+      "tag": "0009_wise_night_thrasher",
+      "breakpoints": true
     }
   ]
 }
