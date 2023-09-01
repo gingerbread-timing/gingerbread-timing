@@ -1,7 +1,7 @@
 //db imports
 import { db, Race, UserSignup } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
-import { getInternalUser } from '@/servertools';
+import { getInternalUser, userIsAdmin } from '@/servertools';
 import { getStringDate, getStringTime, getUserAge, getClockFromSeconds } from '@/clienttools';
 import { getSession } from '@auth0/nextjs-auth0';
 import { eq } from "drizzle-orm";
@@ -22,6 +22,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   //otherwise, grab the result and return a page populated with that row of races
   const thisrace: Race = result[0];
   const today = new Date();
+  const admin = await userIsAdmin(await getInternalUser())
   const signedup: UserSignup[] = await db.select().from(users)
     .innerJoin(signups, eq(users.id,signups.userid))
     .where(eq(signups.raceid,thisrace.id));
@@ -38,8 +39,8 @@ export default async function Page({ params }: { params: { raceid: number } }) {
         <div>{thisrace.description}</div>
         {(thisrace.starttime > today) && <PreRace data={signedup} thisrace={thisrace}/>}
         {(thisrace.endtime < today) && <PostRace signedup={signedup} thisrace={thisrace}/>}
-        <CSVUploader thisrace={thisrace.id}/>
-        <CSVDownloader signedup={signedup} thisrace={thisrace}/>
+        {admin && <CSVUploader thisrace={thisrace.id}/>}
+        {admin && <CSVDownloader signedup={signedup} thisrace={thisrace}/>}
       </div>
     )
   }

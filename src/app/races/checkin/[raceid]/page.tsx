@@ -2,10 +2,12 @@ import { db, Race, User, Signup } from '@/db/dbstuff';
 import { races, users, signups } from '@/db/schema';
 import { eq } from "drizzle-orm";
 import FindCheckIn from './findcheckin';
+import { adminRestrict } from '@/servertools';
 
 
 //pull in race ID through URL
 export default async function Page({ params }: { params: { raceid: number } }) {
+  await adminRestrict()
   //search the database for a matching ID
   const result: Race[] = await db.select().from(races).where(eq(races.id,params.raceid));
 

@@ -1,8 +1,10 @@
 import { db, NewRace } from '@/db/dbstuff';
 import { races } from '@/db/schema';
 import { NextResponse } from 'next/server';
+import { adminRestrict } from '@/servertools';
 
 export async function POST(request: Request) {
+    await adminRestrict()
     //convert the incoming form request to a usable object
     const data = await request.formData();
     const form = Object.fromEntries(data);

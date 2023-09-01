@@ -15,7 +15,6 @@ export const users = mysqlTable("users", {
   state: varchar("state", {length: 255}),
   emergencyname: varchar("emergencyname", {length: 255}),
   emergencyphone: varchar("emergencyphone", {length: 255}),
-  role: text("role").$type<"admin" | "customer">(),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });

@@ -43,6 +43,13 @@
       "when": 1693590193578,
       "tag": "0009_wise_night_thrasher",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1693606982669,
+      "tag": "0010_optimal_veda",
+      "breakpoints": true
     }
   ]
 }

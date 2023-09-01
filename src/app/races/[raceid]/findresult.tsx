@@ -4,10 +4,10 @@ import { getUserAge, getClockFromSeconds } from '@/clienttools';
 import { useState } from "react";
 import './styles.css'
 
-export function ResultsDisplay(params: {signs: UserSignup[]})
+export function ResultsDisplay({signs}: {signs: UserSignup[]})
   {
     const [userlist, setuserlist] = useState(
-        params.signs.map((sign: UserSignup, index)=> 
+        signs.map((sign: UserSignup, index)=> 
         <ResultRunner runner={sign.users} runnersignup={sign.signups} place={index} key={index}/>))
     
     return(
@@ -41,8 +41,8 @@ export function ResultsDisplay(params: {signs: UserSignup[]})
         let display = [] as JSX.Element[]
 
         const lowname = String(formData.get("name")).toLowerCase()
-        for(let i = 0; i < params.signs.length; i++){
-            const sign = params.signs[i]
+        for(let i = 0; i < signs.length; i++){
+            const sign = signs[i]
             const fullname = `${sign.users.firstname} ${sign.users.lastname}`.toLowerCase()
             if(!fullname.includes(lowname ?? "")) continue
             if(gen != "all" && gen.charAt(0) != sign.users.gender.toLowerCase().charAt(0)) continue
@@ -54,15 +54,13 @@ export function ResultsDisplay(params: {signs: UserSignup[]})
         setuserlist(display)
     }
   }
-  function ResultRunner(params: any)
+  function ResultRunner({runner, runnersignup, place}: {runner: User, runnersignup: Signup, place: number})
   {
-    const runner: User = params.runner;
-    const runnersignup: Signup = params.runnersignup;
     const age = getUserAge(runner);
     const clocktime = getClockFromSeconds(runnersignup.totaltime);
     return(
         <div className="runnerresult">
-            <div className="listelement">{params.place+1}</div>
+            <div className="listelement">{place+1}</div>
             <div className="listelement">{runner.firstname} {runner.lastname}</div>
             <div className="listelement">{age}</div>
             <div className="listelement">{runnersignup.totaltime && <>{clocktime}</>}</div>

@@ -3,7 +3,7 @@ import { Race } from "@/db/dbstuff"
 import { RaceDisplay } from './racedisplay';
 import { useState } from "react";
 
-export default function SearchableRaces(params: {races: Race[]})
+export default function SearchableRaces({races}: {races: Race[]})
 {
     const [search, setSearch] = useState("")
     const onChange = (event: any) => {
@@ -11,7 +11,7 @@ export default function SearchableRaces(params: {races: Race[]})
       };
     
     let searchedList = [] as Race[]
-    for(var race of params.races){
+    for(var race of races){
         if(race.name.toLowerCase().includes(search)) searchedList.push(race)
     }
     const display = searchedList.map((item,index) => {return(<RaceDisplay myrace={item} key={index}/>);});
