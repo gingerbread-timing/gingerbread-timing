@@ -37,6 +37,7 @@ export default function FindCheckIn(params: {signedup: UserSignup[]})
             <div className='checkin'>
                 <h3 className='listelement'>Name</h3>
                 <h3 className='listelement'>Age</h3>
+                <h3 className='listelement'>Payment Status</h3>
                 <h3 className='listelement'>Bib #</h3>
                 <h3 className='listelement'>Assign Bib</h3>
             </div>
@@ -45,15 +46,14 @@ export default function FindCheckIn(params: {signedup: UserSignup[]})
     );
   }
 
-  function SignedRunner(params: any)
+  function SignedRunner({runner, runnersignup}: {runner: User, runnersignup: Signup})
   {
-    const runner: User = params.runner;
-    const runnersignup: Signup = params.runnersignup;
     const age = getUserAge(runner);
     return(
         <div className='checkin'>
             <div className='listelement'>{runner.firstname} {runner.lastname}</div>
             <div className='listelement'>{age}</div>
+            <div className='listelement'>{runnersignup.paystatus}</div>
             {(runnersignup.bibnumber && <div className='listelement'>{runnersignup.bibnumber}</div>) 
             || <div className='listelement'>Unassigned</div>}
             <div className='listelement'><CheckInForm raceid={runnersignup.raceid} signupid={runnersignup.id} /></div>    

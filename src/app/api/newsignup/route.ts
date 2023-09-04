@@ -12,12 +12,14 @@ export async function POST(request: Request) {
     const userid = Number(form.userid)
     const raceid = Number(form.raceid)
 
-    const signup = await db.select().from(signups).where(eq(signups.raceid, raceid)).where(eq(signups.userid, userid))
-    if(!signup[0]){
+    let signup = (await db.select().from(signups).where(eq(signups.raceid, raceid)).where(eq(signups.userid, userid)).limit(1)).pop()
+    if(!signup){
         const entry: NewSignup = {userid: userid, raceid: raceid, signupdate: new Date(), paystatus: 'unpaid'};
         await db.insert(signups).values(entry);
+        signup = (await db.select().from(signups).where(eq(signups.raceid, raceid))
+        .where(eq(signups.userid, userid)).limit(1)).pop()
     }
-    const race = await db.select().from(races).where(eq(races.id, raceid))
+    const race = (await db.select().from(races).where(eq(races.id, raceid)).limit(1)).pop()
 
     const session = await stripe.checkout.sessions.create({
         line_items: [
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
             price_data: {
                 currency: "usd",
                 product_data: {
-                    name: `${race[0].name} Sign Up Fee`, //RACE NAME
+                    name: `${race!.name} Sign Up Fee`, //RACE NAME
                     metadata:{
                         userid: userid, //userid here
                         raceid: raceid, //raceid here
@@ -38,8 +40,8 @@ export async function POST(request: Request) {
           },
         ],
         mode: 'payment',
-        success_url: `${process.env["AUTH0_BASE_URL"]}/?success=true`,
-        cancel_url: `${process.env["AUTH0_BASE_URL"]}/?canceled=true`,
+        success_url: `${process.env["AUTH0_BASE_URL"]}/races/paymentoutcome/?success=true&id=${signup!.id}`,
+        cancel_url: `${process.env["AUTH0_BASE_URL"]}/races/paymentoutcome/?canceled=true&id=${signup!.id}`,
       });
       return NextResponse.redirect(session.url!, 302);
 }

@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { raceid: number } }) {
   const thisrace: Race = result[0];
   const today = new Date();
   const admin = await userIsAdmin(await getInternalUser())
-  const signedup: UserSignup[] = await db.select().from(users)
+  const signedup = await db.select().from(users)
     .innerJoin(signups, eq(users.id,signups.userid))
     .where(eq(signups.raceid,thisrace.id));
     return (
@@ -32,12 +32,12 @@ export default async function Page({ params }: { params: { raceid: number } }) {
           <div className='racename'>{thisrace.name}</div>
           <hr/>
           <div className='racecore'>{getStringDate(thisrace.starttime)}</div>
-          <div className='racecore'>LOCAtiON HERE</div>
+          <div className='racecore'>LOCATION HERE</div>
           <div className='racecore'>{getStringTime(thisrace.starttime)} - {getStringTime(thisrace.endtime)}</div>
         </div>
         <h1>Description</h1>
         <div>{thisrace.description}</div>
-        {(thisrace.starttime > today) && <PreRace data={signedup} thisrace={thisrace}/>}
+        {(thisrace.starttime > today) && <PreRace signups={signedup} thisrace={thisrace}/>}
         {(thisrace.endtime < today) && <PostRace signedup={signedup} thisrace={thisrace}/>}
         {admin && <CSVUploader thisrace={thisrace.id}/>}
         {admin && <CSVDownloader signedup={signedup} thisrace={thisrace}/>}
@@ -45,12 +45,30 @@ export default async function Page({ params }: { params: { raceid: number } }) {
     )
   }
 
-  function PreRace(params: any){
-    const thisrace = params.thisrace;
-    const signedup = params.data;
-    return(<div>
-
-      <SignMeUp data={signedup} thisrace={thisrace}/>
+  async function PreRace({signups, thisrace}: {signups: UserSignup[], thisrace: Race}){
+    //if there's no login, prompt the user to login
+    const session =  await getSession();
+    if(!session) return (<h2><a href="/api/auth/login">Log in</a> to sign up for this race!</h2>);
+    const internalUser = await getInternalUser();
+    //if the logged in user is already signed up, let them know
+    const mysignup = signups.filter((sign) => sign.users.id == internalUser.id).pop()
+    if(mysignup){
+      switch(mysignup.signups.paystatus){
+        case 'paid':
+          return (<h2>Looks like you're already signed up for this race!</h2>);
+        case 'pending':
+          return (<h2>Payment is being processed...</h2>);
+      }
+    }
+    return(
+    <div>
+      <form action="/api/newsignup" method="post">
+        <div>
+          <input type="hidden" id="userid" name="userid" value={internalUser.id}/>
+        </div>
+          <input type="hidden" id="raceid" name="raceid" value={thisrace.id}/>
+        <button type="submit">Sign me up for this race!</button>
+      </form>
       <div><Link href={`checkin/${thisrace.id}`}><h3>check-in this race</h3></Link></div>
     </div>)
   }
@@ -64,36 +82,6 @@ export default async function Page({ params }: { params: { raceid: number } }) {
       <h2>RESULTS</h2>
       <ResultsDisplay signs={sortedsigns}/>
     </div>)
-  }
-
-  
-
-  async function SignMeUp(params: any)
-  {
-    //if there's no login, prompt the user to login
-    const session =  await getSession();
-    if(!session) return (<h2><a href="/api/auth/login">Log in</a> to sign up for this race!</h2>);
-
-    //if the logged in user is already signed up, let them know
-    const userlist = params.data.map((user: any) => user.users.id);
-    const internalUser = await getInternalUser();
-    for(var user of userlist)
-    {
-      if(parseInt(user) === internalUser.id) return (<h2>looks like you're already signed up for this race!</h2>);
-    }
-   
-    //otherwise allow a signup
-    return(
-      <div>
-          <form action="/api/newsignup" method="post">
-            <div>
-              <input type="hidden" id="userid" name="userid" value={internalUser.id}/>
-            </div>
-              <input type="hidden" id="raceid" name="raceid" value={params.thisrace.id}/>
-            <button type="submit">Sign me up for this race!</button>
-          </form>
-      </div>
-    );
   }
 
   function CSVUploader(params: {thisrace: number}){
