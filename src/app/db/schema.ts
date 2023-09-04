@@ -1,4 +1,4 @@
-import { serial, text, timestamp, mysqlTable, datetime, varchar, int, float, boolean, smallint, tinyint } from "drizzle-orm/mysql-core";
+import { serial, text, timestamp, mysqlTable, datetime, varchar, int, float, boolean, smallint, tinyint, mysqlEnum } from "drizzle-orm/mysql-core";
  
 export const users = mysqlTable("users", {
   id: serial("id"),
@@ -43,10 +43,9 @@ export const signups = mysqlTable("signups", {
   userid: int('userid').notNull(),
   raceid: int('raceid').notNull(),
   bibnumber: int('bibnumber'),
-  sensorid: int('sensorid'),
+  paystatus: mysqlEnum('paystatus', ['paid','pending','unpaid']).notNull(),
   totaltime: float('totaltime'),
   completed: boolean('completed'),
-  paid: boolean('paid'),
   signupdate: timestamp('signupdate')
 });
 
