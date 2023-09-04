@@ -10,16 +10,11 @@ export async function POST(request: Request) {
     const body = await request.text()
     const signature = headers().get('stripe-signature')
     let event:Stripe.Event
-    try{
-        event = stripe.webhooks.constructEvent(
-            body,
-            signature!,
-            process.env["STRIPE_ENDPOINT_SECRET"]!
-        );
-    }
-    catch (error){
-        return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
-    }
+    event = stripe.webhooks.constructEvent(
+        body,
+        signature!,
+        process.env["STRIPE_ENDPOINT_SECRET"]!
+    );
     console.log(body)
     switch(event.type){
         case 'checkout.session.completed':
