@@ -28,6 +28,7 @@ export async function POST(request: Request) {
             const checkmeta = event.data.object.metadata
             console.log(checkmeta.signupid)
             await db.update(signups).set({ paystatus: 'paid' }).where(eq(signups.id, checkmeta.signupid));
+            break;
     }
     return new NextResponse(`ok`, { status: 200 })
 }
