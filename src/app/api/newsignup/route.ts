@@ -29,16 +29,15 @@ export async function POST(request: Request) {
                 currency: "usd",
                 product_data: {
                     name: `${race!.name} Sign Up Fee`, //RACE NAME
-                    metadata:{
-                        userid: userid, //userid here
-                        raceid: raceid, //raceid here
-                    }
                 },
                 unit_amount: 100 //PRICE HERE
             },
             quantity: 1,
           },
         ],
+        metadata:{
+            signupid: signup!.id
+        },
         mode: 'payment',
         success_url: `${process.env["AUTH0_BASE_URL"]}/races/paymentoutcome/?success=true&id=${signup!.id}`,
         cancel_url: `${process.env["AUTH0_BASE_URL"]}/races/paymentoutcome/?canceled=true&id=${signup!.id}`,

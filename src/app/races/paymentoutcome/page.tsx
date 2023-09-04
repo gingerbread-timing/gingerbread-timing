@@ -16,7 +16,6 @@ export default async function Page({searchParams}: {
         message = "Your payment was canceled. You may retry payment by returning to the race page and clicking the sign up button."
     }
     else if(searchParams.success){
-        await db.update(signups).set({ paystatus: 'pending' }).where(eq(signups.id, signupid));
         message = "We are currently processing your payment. You will receive an email notification when the payment is complete."
     }
     return (<div className="pagecontainer">
