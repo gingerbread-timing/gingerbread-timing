@@ -5,7 +5,6 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers"
 const stripe = new Stripe(process.env["STRIPE_SECRET_KEY"]!, {typescript: true, apiVersion: "2023-08-16"});
-const endpointSecret = "whsec_766ced8baab2bde9f5277287db3ba6708ef46f2c01a32c873fd1a4f04ccd553a"
 
 export async function POST(request: Request) {
     const body = await request.text()
@@ -15,7 +14,7 @@ export async function POST(request: Request) {
         event = stripe.webhooks.constructEvent(
             body,
             signature!,
-            endpointSecret
+            process.env["STRIPE_ENDPOINT_SECRET"]!
         );
     }
     catch (error){
