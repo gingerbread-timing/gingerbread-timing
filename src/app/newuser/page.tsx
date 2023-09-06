@@ -397,7 +397,7 @@ export default function Home() {
                 <div className="row" style={{paddingTop: '2em'}}>
                     <div className="col">
                         <div className="d-grid gap-2">
-                            <button type="button" className="btn btn-secondary mx-auto">Register</button>
+                            <button type="submit" className="btn btn-secondary mx-auto">Register</button>
                         </div>
                     </div>
                 </div>
@@ -405,5 +405,3 @@ export default function Home() {
         </div>
     )
 }
-
-{/* <button className="submitButton" type="submit">Register</button> */}
