@@ -15,3 +15,21 @@
     padding: 5px;
     overflow: wrap;
 }
+
+.shadowbox{
+    border-top: 3px solid teal;
+    margin: 10px;
+    padding: 1%;
+    box-shadow: 0px 0px 2px 2px gray;
+    width: 20%;
+}
+
+.eventcontainer{
+    display: inline;
+    
+}
+
+.adminzone{
+    border: 1px dotted black;
+    padding: 1%;
+}

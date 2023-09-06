@@ -1,4 +1,4 @@
-import { serial, text, timestamp, mysqlTable, datetime, varchar, int, float, boolean, smallint, tinyint, mysqlEnum } from "drizzle-orm/mysql-core";
+import { serial, text, timestamp, mysqlTable, datetime, varchar, int, float, boolean, smallint, mysqlEnum } from "drizzle-orm/mysql-core";
  
 export const users = mysqlTable("users", {
   id: serial("id"),
@@ -28,7 +28,6 @@ export const races = mysqlTable("races", {
   length: smallint("length").notNull(),
   starttime: datetime("starttime").notNull(),
   endtime: datetime("endtime").notNull(),
-  price: tinyint("price").notNull(),
   description: text("description").notNull(),
   contactemail: varchar("contactemail", {length: 255}),
   instagram: varchar("instagram", {length: 255}),
@@ -42,11 +41,19 @@ export const signups = mysqlTable("signups", {
   id: serial("id"),
   userid: int('userid').notNull(),
   raceid: int('raceid').notNull(),
+  eventid: int('eventid').notNull(),
   bibnumber: int('bibnumber'),
   paystatus: mysqlEnum('paystatus', ['paid','pending','unpaid']).notNull(),
   totaltime: float('totaltime'),
   completed: boolean('completed'),
   signupdate: timestamp('signupdate')
+});
+
+export const events = mysqlTable("events", {
+  id: serial("id"),
+  raceid: int("raceid").notNull(),
+  name: varchar("name", {length: 255}).notNull(),
+  price: int("price").notNull()
 });
 
 export const admins = mysqlTable("admins", {

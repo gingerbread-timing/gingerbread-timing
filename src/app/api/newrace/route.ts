@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const form = Object.fromEntries(data);
 
     //parse the form data into the corresponding db ORM fields
-    const entry: NewRace = {name: String(form.name), routeURL: String(form.routeurl), heroURL: String(form.herourl), starttime: new Date(String(form.starttime)), endtime: new Date(String(form.endtime)), length: parseInt(String(form.length)), price: parseInt(String(form.price)), description: String(form.description), contactemail: String(form.contactemail)};
+    const entry: NewRace = {name: String(form.name), routeURL: String(form.routeurl), heroURL: String(form.herourl), starttime: new Date(String(form.starttime)), endtime: new Date(String(form.endtime)), length: parseInt(String(form.length)), description: String(form.description), contactemail: String(form.contactemail)};
 
     await db.insert(races).values(entry);
 

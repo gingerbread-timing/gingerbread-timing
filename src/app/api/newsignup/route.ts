@@ -1,5 +1,5 @@
 import { db, NewSignup } from '@/db/dbstuff';
-import { races, signups } from '@/db/schema';
+import { events, races, signups } from '@/db/schema';
 import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import Stripe from "stripe";
@@ -11,10 +11,11 @@ export async function POST(request: Request) {
     const form = Object.fromEntries(data);
     const userid = Number(form.userid)
     const raceid = Number(form.raceid)
-
+    const eventid = Number(form.eventid)
+    const event = (await db.select().from(events).where(eq(events.id, eventid)).limit(1)).pop()
     let signup = (await db.select().from(signups).where(eq(signups.raceid, raceid)).where(eq(signups.userid, userid)).limit(1)).pop()
     if(!signup){
-        const entry: NewSignup = {userid: userid, raceid: raceid, signupdate: new Date(), paystatus: 'unpaid'};
+        const entry: NewSignup = {userid: userid, raceid: raceid, eventid: eventid, signupdate: new Date(), paystatus: 'unpaid'};
         await db.insert(signups).values(entry);
         signup = (await db.select().from(signups).where(eq(signups.raceid, raceid))
         .where(eq(signups.userid, userid)).limit(1)).pop()
@@ -28,9 +29,9 @@ export async function POST(request: Request) {
             price_data: {
                 currency: "usd",
                 product_data: {
-                    name: `${race!.name} Sign Up Fee`, //RACE NAME
+                    name: `${race!.name} - ${event!.name} Sign Up Fee`,
                 },
-                unit_amount: 100 //PRICE HERE
+                unit_amount: event!.price * 100 
             },
             quantity: 1,
           },
