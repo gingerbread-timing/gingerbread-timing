@@ -1,5 +1,5 @@
 import { db, NewSignup, NewUser} from '@/db/dbstuff';
-import { signups, users } from '@/db/schema';
+import { events, signups, users } from '@/db/schema';
 import { NextResponse } from 'next/server';
 import neatCsv from 'neat-csv';
 import { desc, eq } from "drizzle-orm";
@@ -54,6 +54,10 @@ export async function POST(request: Request) {
         let placement = {} as NewSignup
         placement.raceid = raceid;
         placement.userid = newid;
+        placement.paystatus = 'unpaid'
+        const maybeEvent = await getEventFromFileName(file.name)
+        if(!maybeEvent) return new NextResponse('CSV filename did not match an existing event for the race. Add a matching event on the race page.', {status: 415})
+        placement.eventid = maybeEvent
         placement.bibnumber = newbib
         if(usertiming) placement.totaltime = usertiming
         newplacements.push(placement);
@@ -70,7 +74,17 @@ export async function POST(request: Request) {
                 .where(eq(signups.id, timing.signupid))}}})
                 
     return NextResponse.redirect(new URL(`/races/${raceid}`, request.url), 302);
+
+    async function getEventFromFileName(filename: string){
+        const eventlist = await db.select().from(events).where(eq(events.raceid, raceid))
+        const lowfile = filename.toLowerCase()
+        const targetevent = eventlist.filter(event => lowfile.includes(event.name.toLowerCase()))
+        if(targetevent.length === 0) return null
+        return targetevent[0].id
+    }
 }
+
+
 
 function clockToSeconds(clocktime: string | null){
     if(!clocktime) return null

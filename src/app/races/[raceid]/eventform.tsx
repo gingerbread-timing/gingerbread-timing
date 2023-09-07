@@ -5,7 +5,7 @@ export function AddEvent({raceid} : {raceid: number}){
     return(
         <div className="shadowbox">
             <h3>Add an Event</h3>
-            <form action={SubmitNewEvent}>
+            <form action={SubmitAndClear} id="eventForm">
                 <div>
                 <input type="hidden" value={raceid} id="raceid" name="raceid"/>
                 <label htmlFor="name">Event Name </label>
@@ -17,4 +17,10 @@ export function AddEvent({raceid} : {raceid: number}){
             </form>
         </div>
     )
+}
+
+async function SubmitAndClear(formData: FormData){
+    await SubmitNewEvent(formData)
+    const form = document.getElementById("eventForm") as HTMLFormElement
+    form.reset()
 }

@@ -7,6 +7,7 @@ import { getSession } from '@auth0/nextjs-auth0';
 import { eq } from "drizzle-orm";
 import { ResultsDisplay } from './findresult';
 import { AddEvent } from './eventform';
+import { UpdateRace } from './updaterace';
 import Link from 'next/link';
 import CSVDownloadLink from './downloadlink';
 import './styles.css'
@@ -34,16 +35,20 @@ export default async function Page({ params }: { params: { raceid: number } }) {
           <div className='racename'>{thisrace.name}</div>
           <hr/>
           <div className='racecore'>{getStringDate(thisrace.starttime)}</div>
-          <div className='racecore'>LOCATION HERE</div>
+          <div className='racecore'>{thisrace.location ?? 'Anywhere'}</div>
           <div className='racecore'>{getStringTime(thisrace.starttime)} - {getStringTime(thisrace.endtime)}</div>
         </div>
         <h1>Description</h1>
         <div>{thisrace.description}</div>
         {(thisrace.starttime > today) && <PreRace signups={signedup} thisrace={thisrace} eventlist={eventlist}/>}
-        {<PostRace signedup={signedup} eventlist={eventlist}/>}
+        {(thisrace.endtime < today) && <PostRace signedup={signedup} eventlist={eventlist}/>}
         {admin && (<div className='adminzone'>
           <h2>Admin Zone</h2>
-          {(thisrace.starttime > today) && <AddEvent raceid={thisrace.id}/>}
+          <AddEvent raceid={thisrace.id}/>
+          <UpdateRace thisrace={thisrace}/>
+          <div>
+            <Link href={`checkin/${thisrace.id}`}><h3>Day-Of Check-In</h3></Link>
+          </div>
           <CSVUploader thisrace={thisrace.id}/>
           <CSVDownloadLink signedup={signedup} thisrace={thisrace} events={eventlist}/>
         </div>)}
@@ -84,9 +89,6 @@ export default async function Page({ params }: { params: { raceid: number } }) {
       <div className='eventcontainer'>
       <h2>Events:</h2>
       {display}
-      </div>
-      <div>
-        <Link href={`checkin/${thisrace.id}`}><h3>Day-Of Check-In</h3></Link>
       </div>
     </div>)
   }

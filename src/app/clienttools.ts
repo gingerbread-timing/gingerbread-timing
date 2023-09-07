@@ -30,3 +30,27 @@ export function getStringTime(date?: Date){
 export function getClockFromSeconds(seconds: number | null){
     return new Date((seconds ?? 0) * 1000).toISOString().slice(11, 22);
 }
+
+export function getIsoString(date: Date | undefined) {
+  if(!date) return ""
+  var tzo = -date.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function(num: number) {
+          return (num < 10 ? '0' : '') + num;
+      };
+
+  return date.getFullYear() +
+      '-' + pad(date.getMonth() + 1) +
+      '-' + pad(date.getDate()) +
+      'T' + pad(date.getHours()) +
+      ':' + pad(date.getMinutes()) +
+      ':' + pad(date.getSeconds()) +
+      dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+      ':' + pad(Math.abs(tzo) % 60);
+}
+
+export function sanitizeFormDate(formDate: FormDataEntryValue){
+  const preDate = new Date(String(formDate))
+  const tzo = preDate.getTimezoneOffset() * 60000
+  return new Date(preDate.valueOf() - tzo)
+}
