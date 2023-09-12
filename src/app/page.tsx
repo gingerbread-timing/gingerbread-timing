@@ -2,7 +2,7 @@
 import { db, Race } from './db/dbstuff';
 import { races } from './db/schema';
 import Image  from 'next/image';
-import people from '@/images/peoplerunning.jpg'
+import logo from '@/images/Gingerbread.png';
 
 import SearchableRaces from './homecomponents/findrace';
 //link import
@@ -18,6 +18,7 @@ export default function Home() {
   //build a list of races based on the race table, then pass the race object as a parameter to the component
   return (
     <div className='pagecontainer'>
+      <Image src={logo} alt='gingerbread' className='logo'/>
       <SearchableRaces races={sortedraces}/>
     </div>
   )

@@ -79,6 +79,7 @@ export default withPageAuthRequired(
         {upmap}
         <h3>Completed Races</h3>
         {pastmap}
+        <a href="/api/auth/logout">Log Out</a>
       </div>
       
     )
