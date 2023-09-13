@@ -13,12 +13,17 @@ export async function POST(request: Request) {
     if (!file) {
         return NextResponse.json({ success: false })
       }
+    
+    const maybeEvent = await getEventFromFileName(file.name)
+    if(!maybeEvent) return new NextResponse('CSV filename did not match an existing event for the race. Add a matching event on the race page.', {status: 415})
     //read from the uploaded file
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
     //pull csv from file and parse it into object
-    const parsed = await neatCsv(buffer,{skipLines: 1});
+    let parsed = await neatCsv(buffer,{skipLines: 1});
+    if(!parsed[0]["Name"]) parsed = await neatCsv(buffer);
+    console.log(parsed)
     
     const userlist = await db.select().from(users).orderBy(desc(users.id)).limit(1);
     let newid = userlist[0].id ?? 0;
@@ -55,13 +60,13 @@ export async function POST(request: Request) {
         placement.raceid = raceid;
         placement.userid = newid;
         placement.paystatus = 'unpaid'
-        const maybeEvent = await getEventFromFileName(file.name)
-        if(!maybeEvent) return new NextResponse('CSV filename did not match an existing event for the race. Add a matching event on the race page.', {status: 415})
         placement.eventid = maybeEvent
         placement.bibnumber = newbib
         if(usertiming) placement.totaltime = usertiming
         newplacements.push(placement);
         resultusers.push(resultuser);
+        console.log(placement)
+        console.log(resultuser)
     }
 
     await db.transaction(async (tx) => {

@@ -32,7 +32,7 @@ export function RaceForm({thisrace}:{thisrace: Race | null}) {
             </div>
             <div>
                 <label htmlFor="length">Length:</label>
-                <input type="text" id="length" name="length" defaultValue={thisrace?.length ?? ""} required/>
+                <input type="number" id="length" name="length" defaultValue={thisrace?.length ?? ""} required/>
             </div>
             <div>
                 <label htmlFor="description">Description:</label>
