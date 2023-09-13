@@ -3,6 +3,7 @@ import { events, signups, users } from '@/db/schema';
 import { NextResponse } from 'next/server';
 import neatCsv from 'neat-csv';
 import { desc, eq } from "drizzle-orm";
+import stripBomBuffer from 'strip-bom-buf';
 
 export async function POST(request: Request) {
     //convert the incoming form request to a usable object
@@ -18,12 +19,11 @@ export async function POST(request: Request) {
     if(!maybeEvent) return new NextResponse('CSV filename did not match an existing event for the race. Add a matching event on the race page.', {status: 415})
     //read from the uploaded file
     const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+    const buffer = stripBomBuffer(Buffer.from(bytes))
 
     //pull csv from file and parse it into object
     let parsed = await neatCsv(buffer,{skipLines: 1});
     if(!parsed[0]["Name"]) parsed = await neatCsv(buffer);
-    console.log(parsed)
     
     const userlist = await db.select().from(users).orderBy(desc(users.id)).limit(1);
     let newid = userlist[0].id ?? 0;
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
 
     for(var entry of parsed){
         const newbib = parseInt(entry["Bib"])
+        console.log(newbib)
         const usertiming = clockToSeconds(entry["Clock Time"])
         //check if signups contain bib number- if so, attach timing to signup
         const bibmatch = signedup.filter(sign => {return sign.bibnumber === newbib})
@@ -98,6 +99,5 @@ function clockToSeconds(clocktime: string | null){
     seconds += parseFloat(clocksplit.pop() ?? "0")
     seconds += parseFloat(clocksplit.pop() ?? "0")*60
     seconds += parseFloat(clocksplit.pop() ?? "0")*3600
-    console.log(seconds)
     return seconds;
 }

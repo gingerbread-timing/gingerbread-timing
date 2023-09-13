@@ -21,11 +21,12 @@ export default function CSVDownloadLink({signedup, thisrace, events}: {signedup:
             //division
         })
     }
+    const filename: string = `${thisrace.name} ${events[activeEvent].name} Race Report`
     return (<>
     <>Event: </> 
     <select id="event" name="event" value={activeEvent} onChange={(e) => selectEvent(parseInt(e.target.value))}>
         {eventoptions}
     </select>
-    <CSVLink data={csvData} enclosingCharacter={""} filename={`${thisrace.name} ${events[activeEvent].name} Race Report`}> Download Event Signups as CSV</CSVLink>
+    <CSVLink data={csvData} enclosingCharacter={""} filename={filename}> Download Event Signups as CSV</CSVLink>
     </>)
 }
