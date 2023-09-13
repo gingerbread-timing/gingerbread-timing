@@ -2,10 +2,9 @@ import '@/globals.css';
 import { Race } from '@/db/dbstuff';
 import { getIsoString } from '@/clienttools';
 
-export default function NewRace({thisrace}:{thisrace?: Race | null}) {
+export default function NewRace({thisrace}:{thisrace: Race | null}) {
     //fields need to be matched on api/route.ts in the NewRace object
     //date and/or time fields will break the 'insert' if they are null so keep them required
-    console.log(getIsoString(thisrace?.endtime))
     return (
       <div>
         <h1>{thisrace ? `Update Race: ${thisrace.name}`:"Create a New Race"}</h1>
